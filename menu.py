@@ -55,6 +55,9 @@ while running:
         posx = 0
 
 
+    if pygame.mouse.get_pressed() == (True, False, False):
+        mousepos = pygame.mouse.get_pos()
+
 
     # flip() the display to put your work on screen
 
