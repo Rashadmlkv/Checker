@@ -7,13 +7,14 @@ import pygame, sys
 # 2 - white , 4 - king
 
 pygame.init()
-screen = pygame.display.set_mode((400, 400))
 clock = pygame.time.Clock()
 running = True
 posx = 0
 posy = 0
-width = 50
-height = 50
+screen_width = 800
+screen_height = 800
+screen = pygame.display.set_mode((screen_width, screen_height))
+rect = 100
 color = (255,0,0)
 
 
@@ -44,21 +45,21 @@ while running:
     for i in range(8):
         for j in range(8):
             if board[i][j] == 0:
-                pygame.draw.rect(screen, (255,255,255), (posx, posy, width, height))
-                posx += 50
+                pygame.draw.rect(screen, (255,255,255), (posx, posy, rect, rect))
+                posx += rect
             elif board[i][j] == 1:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, width, height))
-                posx += 50
+                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
+                posx += rect
             elif board[i][j] == 3:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, width, height))
-                pygame.draw.circle(screen, (0,0,0), (posx + 25, posy + 25), 13)
-                posx += 50
+                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
+                pygame.draw.circle(screen, (0,0,0), (posx + rect / 2, posy + rect/ 2), rect / 2.5)
+                posx += rect
             elif board[i][j] == 2:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, width, height))
-                pygame.draw.circle(screen, (255,255,255), (posx + 25, posy + 25), 13)
-                posx += 50
+                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
+                pygame.draw.circle(screen, (255,255,255), (posx + rect / 2, posy+rect/2), rect / 2.5)
+                posx += rect
 
-        posy += 50
+        posy += rect
         posx = 0
 
     posx=0
