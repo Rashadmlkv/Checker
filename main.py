@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import pygame, sys
+import pygame, sys, time
 
 # 0 - white square, 1 - black square
 # 3 - black , 5 - king
@@ -16,8 +16,12 @@ screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 rect = 100
 color = (255,0,0)
-
-
+a = 0
+b = 0
+c = 0
+d = 0
+def get_pos(target):
+    return target[1] // rect, target[0] // rect
 #turn 0 means white moves, 1 means black
 turn = 0
 
@@ -34,13 +38,16 @@ board = [
 
 while running:
     for event in pygame.event.get():
-        pygame.event.pump()
+        if event.type == pygame.QUIT:
+            pygame.event.pump()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            a, b = get_pos(pygame.mouse.get_pos())
 
+    
     if turn == 0:
         print("White's turn!")
     else:
         print("Black's turn!")
-
 
     for i in range(8):
         for j in range(8):
@@ -68,10 +75,13 @@ while running:
 
 
     if turn == 0:
-        a, b = [int(a) for a in input("Select piece: ").split()]        
+        ##a, b = [int(a) for a in input("Select piece: ").split()]        
         #is correct piece selected
         if (board[a][b] == 2):
-            c, d = [int(a) for a in input("Select square: ").split()]
+            ##c, d = [int(a) for a in input("Select square: ").split()]
+            if pygame.mouse.get_pressed() == (True, False, False):
+                c, d = get_pos(pygame.mouse.get_pos())
+            print("Moved square: ", a ,': ', b )
             #move
             if (c == a - 1 and (d == b - 1 or d == b + 1) and board[c][d] == 1):
                 board[a][b] = 1
@@ -141,10 +151,12 @@ while running:
 
 
     elif turn == 1:
-        a, b = [int(a) for a in input("Select piece: ").split()]
+        ##a, b = [int(a) for a in input("Select piece: ").split()]
         #is correct piece selected
         if (board[a][b] == 3):
-            c, d = [int(a) for a in input("Select square: ").split()]
+            if pygame.mouse.get_pressed() == (True, False, False):
+                c, d = get_pos(pygame.mouse.get_pos())
+            ##c, d = [int(a) for a in input("Select square: ").split()]
             #move
             if (c == a + 1 and (d == b - 1 or d == b + 1) and board[c][d] == 1):
                 board[a][b] = 1
@@ -209,11 +221,6 @@ while running:
         else:
             print("Select black piece")
 
-
-
-
-
     clock.tick(30)  # limits FPS to 60
 
 pygame.quit()
-
