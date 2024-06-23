@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import draw
 import pygame, sys, time
 
 # 0 - white square, 1 - black square
@@ -9,21 +10,32 @@ import pygame, sys, time
 pygame.init()
 clock = pygame.time.Clock()
 running = True
-posx = 0
-posy = 0
-screen_width = 800
-screen_height = 800
+screen_width, screen_height = 800, 800
 screen = pygame.display.set_mode((screen_width, screen_height))
+a, b, c, d = 0, 0, 0, 0  #ab piece located, cd moving square
+turn = 0
 rect = 100
-color = (255,0,0)
-a = 0
-b = 0
-c = 0
-d = 0
+
+def play_sound():
+    pygame.mixer.music.load("assets/soundeffect.mp3")
+    pygame.mixer.music.play()
+def winlose():
+    whitepiece = 0
+    blackpiece = 0
+    for i in range(len(board)):
+        for k in range(len(board)):
+            if board[i][k] == 3:
+                blackpiece += 1
+            elif board[i][k] == 2:
+                whitepiece += 1
+
+    if whitepiece == 0:
+        print("Black win")
+    elif blackpiece == 0:
+        print("White win")
+
 def get_pos(target):
     return target[1] // rect, target[0] // rect
-#turn 0 means white moves, 1 means black
-turn = 0
 
 #create board
 board = [
@@ -36,44 +48,25 @@ board = [
          [0, 2, 0, 2, 0, 2, 0, 2],
          [2, 0, 2, 0, 2, 0, 2, 0]]
 
+
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.event.pump()
+            #pygame.event.pump()
+            running = 0 
         elif event.type == pygame.MOUSEBUTTONUP:
             a, b = get_pos(pygame.mouse.get_pos())
-
+    
+    winlose()
     
     if turn == 0:
         print("White's turn!")
     else:
         print("Black's turn!")
 
-    for i in range(8):
-        for j in range(8):
-            if board[i][j] == 0:
-                pygame.draw.rect(screen, (255,255,255), (posx, posy, rect, rect))
-                posx += rect
-            elif board[i][j] == 1:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
-                posx += rect
-            elif board[i][j] == 3:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
-                pygame.draw.circle(screen, (0,0,0), (posx + rect / 2, posy + rect/ 2), rect / 2.5)
-                posx += rect
-            elif board[i][j] == 2:
-                pygame.draw.rect(screen, (255,0,0), (posx, posy, rect, rect))
-                pygame.draw.circle(screen, (255,255,255), (posx + rect / 2, posy+rect/2), rect / 2.5)
-                posx += rect
-
-        posy += rect
-        posx = 0
-
-    posx=0
-    posy=0
-    pygame.display.flip()
-
-
+    draw.draw_board(board, screen)
+    
     if turn == 0:
         ##a, b = [int(a) for a in input("Select piece: ").split()]        
         #is correct piece selected
@@ -81,31 +74,27 @@ while running:
             ##c, d = [int(a) for a in input("Select square: ").split()]
             if pygame.mouse.get_pressed() == (True, False, False):
                 c, d = get_pos(pygame.mouse.get_pos())
-            print("Moved square: ", a ,': ', b )
             #move
             if (c == a - 1 and (d == b - 1 or d == b + 1) and board[c][d] == 1):
                 board[a][b] = 1
-                if c == 0:
-                    board[c][d] = 4
-                else:
-                    board[c][d] = 2
+                board[c][d] = 2
+                play_sound()
             #attack
             elif ((c == a - 2 or c == a + 2) and board[c][d] == 1):
                 #left attack
                 if d == b - 2:
                     #forward
                     if c == a - 2 and (board[a-1][b-1] == 3 or board[a-1][b-1] == 5):
-                        if c == 0:
-                            board[c][d] = 4
-                        else:
-                            board[c][d] = 2
+                        board[c][d] = 2
                         board[a][b] = 1
                         board[a-1][b-1] = 1
+                        play_sound()
                     #back
                     elif board[a+1][b-1] == 3 or board[a+1][b-1]==5:
                         board[c][d] = 2
                         board[a][b] = 1
                         board[a+1][b-1] = 1
+                        play_sound()
                     else:
                         print("can't attack")
                         continue
@@ -114,29 +103,29 @@ while running:
                 if d == b + 2:
                     #forward
                     if c == a - 2 and board[a-1][b+1] == 3 or board[a-1][b+1] == 5:
-                        if c == 0:
-                            board[c][d] = 4
-                        else:
-                            board[c][d] = 2
+                        board[c][d] = 2
                         board[a][b] = 1
                         board[a-1][b+1] = 1
+                        play_sound()
                     #back
                     elif board[a+1][b+1] == 3 or board[a+1][b+1] == 5:
                         board[c][d] = 2
                         board[a][b] = 1
                         board[a+1][b+1] = 1
+                        play_sound()
                     else:
                         print("can't attack")
                         continue
 
                 #continue attack
-                if ((board[c+1][d-1] == 3 or board[c+1][d-1] == 5) and board[c+2][d-2] == 1   #left bottom
-                 or (board[c+1][d+1] == 3 or board[c+1][d+1] == 5) and board[c+2][d+2] == 1   #right bottom
-                 or (board[c-1][d-1] == 3 or board[c-1][d-1] == 5) and board[c-2][d-2] == 1   #left upper
-                 or (board[c-1][d+1] == 3 or board[c-1][d+1] == 5) and board[c-2][d+2] == 1): #right upper
+                if (c < 6 and d > 1 and (board[c+1][d-1] == 3 or board[c+1][d-1] == 5) and board[c+2][d-2] == 1   #left bottom
+                 or c < 6 and d < 6 and (board[c+1][d+1] == 3 or board[c+1][d+1] == 5) and board[c+2][d+2] == 1   #right bottom
+                 or c > 1 and d > 1 and (board[c-1][d-1] == 3 or board[c-1][d-1] == 5) and board[c-2][d-2] == 1   #left upper
+                 or c > 1 and d < 6 and (board[c-1][d+1] == 3 or board[c-1][d+1] == 5) and board[c-2][d+2] == 1): #right upper
                         for i in board:
                             print(i)
                         continue
+
             else:
                 print("can't move")
                 continue
@@ -161,23 +150,23 @@ while running:
             if (c == a + 1 and (d == b - 1 or d == b + 1) and board[c][d] == 1):
                 board[a][b] = 1
                 board[c][d] = 3
+                play_sound()
             #attack
             elif ((c == a - 2 or c == a + 2) and board[c][d] == 1):
                 #left attack
                 if d == b - 2:
                     #forward
                     if c == a + 2 and board[a+1][b-1] == 2:
-                        if c == 7:
-                            board[c][d] = 5
-                        else:
-                            board[c][d] = 3
+                        board[c][d] = 3
                         board[a][b] = 1
                         board[a+1][b-1] = 1
+                        play_sound()
                     #back
                     elif board[a-1][b-1] == 2:
                         board[c][d] = 3
                         board[a][b] = 1
                         board[a-1][b-1] = 1
+                        play_sound()
                     else:
                         print("can't attack")
                         continue
@@ -186,26 +175,25 @@ while running:
                 if d == b + 2:
                     #forward
                     if c == a + 2 and board[a+1][b+1] == 2:
-                        if c == 7:
-                            board[c][d] = 5
-                        else:
-                            board[c][d] = 3
+                        board[c][d] = 3
                         board[a][b] = 1
                         board[a+1][b+1] = 1
+                        play_sound()
                     #back
                     elif board[a-1][b+1] == 2:
                         board[c][d] = 3
                         board[a][b] = 1
                         board[a-1][b+1] = 1
+                        play_sound()
                     else:
                         print("can't attack")
                         continue
 
                 #continue attack
-                if (board[c+1][d-1] == 2 and board[c+2][d-2] == 1   #left bottom
-                 or board[c+1][d+1] == 2 and board[c+2][d+2] == 1   #right bottom
-                 or board[c-1][d-1] == 2 and board[c-2][d-2] == 1   #left upper
-                 or board[c-1][d+1] == 2 and board[c-2][d+2] == 1): #right upper
+                if (c < 6 and d > 1 and board[c+1][d-1] == 2 and board[c+2][d-2] == 1   #left bottom
+                 or c < 6 and d < 6 and board[c+1][d+1] == 2 and board[c+2][d+2] == 1   #right bottom
+                 or c > 1 and d > 1 and board[c-1][d-1] == 2 and board[c-2][d-2] == 1   #left upper
+                 or c > 1 and d < 6 and board[c-1][d+1] == 2 and board[c-2][d+2] == 1): #right upper
                     for i in board:
                         print(i)
                     continue
@@ -221,6 +209,6 @@ while running:
         else:
             print("Select black piece")
 
-    clock.tick(30)  # limits FPS to 60
+    clock.tick(30)  # limits FPS to 30
 
 pygame.quit()
