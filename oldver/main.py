@@ -143,9 +143,6 @@ while running:
         if ai.ai_make_move(board):
             turn = 0
         else:
-            print("can;t move")
-
-
+            print("can't move")
     clock.tick(30)  # limits FPS to 30
 
-pygame.quit()
