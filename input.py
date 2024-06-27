@@ -1,3 +1,8 @@
+'''
+    Check input is between index
+    is player piece
+    is king
+'''
 def getPiece(board, turn):
     while True:
         try:
@@ -17,6 +22,14 @@ def getPiece(board, turn):
         except (ValueError, TypeError):
             print("Select only two integers!")
 
+'''
+    Check input is between index
+    diogonal move
+    black and empty square
+    No more than 2 squares away
+    No jumping on empty or self piece
+    and if pawn, don't move backwards
+'''
 def getSquare(board, turn, slcrow, slccol, isKing):
     while True:
         try:
@@ -25,44 +38,32 @@ def getSquare(board, turn, slcrow, slccol, isKing):
             if (dstrow < 0 or dstrow > 7) or (dstrow < 0 or dstcol > 7):
                 print("Select integers between 0 & 7 !")
                 continue
+
+            elif (abs(dstrow - slcrow) != abs(dstcol - slccol)):
+                print("Select diogonal square!")
+                continue
+
             elif (board[dstrow][dstcol] != 1):
                 print("Select empty and black square!")
                 continue
 
-            if isKing:
-                pieces = []
-                row_step = 1 if dstrow > slcrow else -1
-                col_step = 1 if dstcol > slccol else -1
+            elif (slcrow - dstrow > 2) or (dstrow - slcrow > 2) or (slccol - dstcol > 2) or (dstcol - slccol > 2):
+                print("Select at most two squares away!")
+                continue
 
-                for i, j in zip(range(slcrow + row_step, dstrow, row_step), range(slccol + col_step, dstcol, col_step)):
-                    pieces.append(board[i][j])
+            elif (board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == 1 or board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == turn) and ((slcrow - dstrow == 2) or (dstrow - slcrow == 2)):
+                print("Select attacable square!")
+                continue
 
-                enemy_pieces = [2, 4] if turn == 2 else [3, 5]
-                own_pieces = [2, 4] if turn == 1 else [3, 5]
+            elif (board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == 1 or board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == turn) and ((slcrow - dstrow == 2) or (dstrow - slcrow == 2)):
+                print("Select attacable square!")
+                continue
 
-                if any(p in pieces for p in own_pieces):
-                    print("Select an attackable square!")
-                    continue
+            elif not isKing and (slcrow - dstrow < 0):
+                print("Select forward move!")
+                continue
 
-                if pieces.count(enemy_pieces[0]) > 1 or pieces.count(enemy_pieces[1]) > 1:
-                    print("Select an attackable square!")
-                    continue
-            else:
-                if (slcrow - dstrow > 2) or (dstrow - slcrow > 2) or (slccol - dstcol > 2) or (dstcol - slccol > 2):
-                    print("Select at most two squares away!")
-                    continue
-                elif (board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == 1 or board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] == turn) and ((slcrow - dstrow == 2) or (dstrow - slcrow == 2)):
-                    print("Select attacable square!3")
-                    continue
-            
             return dstrow, dstcol
 
         except (ValueError, TypeError):
             print("Select only two integers!")
-
-def custom_range(start, end):
-    if start < end:
-        step = 1
-    else:
-        step = -1
-    return range(start, end + step, step)

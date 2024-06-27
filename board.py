@@ -1,10 +1,15 @@
+'''
+    0 - White square,   1 - Black square
+    2 - White pawn,     4 - White King
+    3 - Black pawn,     5 - Black King
+'''
 def createBoard(color="Black"):
     if color == "Black":
         board = [
                 [0, 2, 0, 2, 0, 2, 0, 2],
                 [2, 0, 2, 0, 2, 0, 2, 0],
                 [0, 2, 0, 2, 0, 2, 0, 2],
-                [1, 0, 1, 0, 1, 0, 1, 0],
+                [1, 0, 3, 0, 1, 0, 1, 0],
                 [0, 1, 0, 1, 0, 1, 0, 1],
                 [3, 0, 3, 0, 3, 0, 3, 0],
                 [0, 3, 0, 3, 0, 3, 0, 3],
@@ -24,6 +29,11 @@ def createBoard(color="Black"):
     else:
         print("Unknown input!")
 
+'''
+    Reassign Board
+    Become king
+    in attack move check for double jump
+'''
 def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
     contAttack = False
 
@@ -40,7 +50,9 @@ def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
 
     return board, contAttack
 
-
+'''
+    Check game is finished
+'''
 def isFinish(board, running):
     whites, blacks = 0, 0
     for i in range(8):
@@ -61,6 +73,9 @@ def isFinish(board, running):
     else:
         return True
 
+'''
+    Check for double jump
+'''
 def isContinue(board, c, d):
     if (c < 6 and d > 1 and (board[c+1][d-1] == 3 or board[c+1][d-1] == 5) and board[c+2][d-2] == 1   #left bottom
             or c < 6 and d < 6 and (board[c+1][d+1] == 3 or board[c+1][d+1] == 5) and board[c+2][d+2] == 1   #right bottom
