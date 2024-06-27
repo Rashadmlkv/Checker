@@ -1,3 +1,6 @@
+import draw as drw
+import pygame
+pygame.init()
 '''
     Check input is between index
     is player piece
@@ -5,9 +8,9 @@
 '''
 def getPiece(board, turn):
     while True:
+        slcrow, slccol = drw.convertInput()
         try:
-            slcrow, slccol = [int(a) for a in input("Select piece: ").split()]
-
+            #slcrow, slccol = [int(a) for a in input("Select piece: ").split()]
             if (slcrow < 0 or slcrow > 7) or (slccol < 0 or slccol > 7):
                 print("Select integers between 0 & 7 !")
                 continue
@@ -32,9 +35,9 @@ def getPiece(board, turn):
 '''
 def getSquare(board, turn, slcrow, slccol, isKing):
     while True:
+        dstrow, dstcol = drw.convertInput()
         try:
-            dstrow, dstcol = [int(a) for a in input("Select square: ").split()]
-            
+            #dstrow, dstcol = [int(a) for a in input("Select square: ").split()]
             if (dstrow < 0 or dstrow > 7) or (dstrow < 0 or dstcol > 7):
                 print("Select integers between 0 & 7 !")
                 continue

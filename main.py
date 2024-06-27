@@ -2,16 +2,20 @@
 
 import board as brd
 import input as io
+import draw as drw
+
 
 running = True
 turn = 3
 board = brd.createBoard()
-
+screen = drw.createWindow()
 
 while running:
-    brd.printBoard(board)
+    #brd.printBoard(board)
+    drw.drawBoard(board, screen)
 
     slcrow, slccol, isKing = io.getPiece(board, turn)
+    drw.highliteSquare(screen, slcrow, slccol)
     dstrow, dstcol = io.getSquare(board, turn, slcrow, slccol, isKing)
     board, contAttack = brd.updateBoard(board, turn, slcrow, slccol, dstrow, dstcol)
 
@@ -28,3 +32,4 @@ while running:
         turn = 3
         print("Black's turn")
 
+drw.quit()
