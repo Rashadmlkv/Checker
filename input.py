@@ -59,9 +59,14 @@ def getSquare(board, turn, slcrow, slccol, isKing):
                 print("Select attacable square!")
                 continue
 
-            elif not isKing and (slcrow - dstrow < 0):
-                print("Select forward move!")
-                continue
+            elif not isKing:
+                if (slcrow - dstrow < 0) and turn == 3:
+                    print("Select forward move!")
+                    continue
+
+                elif (dstrow - slcrow < 0) and turn == 2:
+                    print("Select forward move!")
+                    continue
 
             return dstrow, dstcol
 
