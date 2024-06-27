@@ -1,45 +1,54 @@
 import pygame
 pygame.init()
+
+screenObj = pygame.display.Info()
+screen20percent = screenObj.current_h / 100 * 20
+screenWidth = screenObj.current_w
+screenHeight = screenObj.current_h - screen20percent
 #rgb
-white = (249, 249, 249)
-red = (224, 20, 61)
-black = (41, 39, 40)
+white = (242, 227, 219)
+black = (65, 100, 74)
+back = (38, 58, 41)
+highlite = (232, 106, 51)
 
 #positions
 posx, posy = 0, 0
 
 #rectangle
-rect = 100
+rect = screenHeight // 8
+
+whitepiece = pygame.image.load("assets/whitepiece.png")
+blackpiece = pygame.image.load("assets/blackpiece.png")
 
 def createWindow():
-    infoObject = pygame.display.Info()
-    screen = pygame.display.set_mode((800, 800))
+    screen = pygame.display.set_mode((screenHeight + screen20percent,screenHeight))
 
     return screen
 
 def drawBoard(board , screen):
+    screen.fill(back)
     global posx, posy
+    print(rect)
     for i in range(8):
         for j in range(8):
-            if board[i][j] == 0:
-                pygame.draw.rect(screen, white, (posx, posy, rect, rect))
-                posx += rect
-            elif board[i][j] == 1:
-                pygame.draw.rect(screen, red, (posx, posy, rect, rect))
-                posx += rect
-            elif board[i][j] == 3:
-                pygame.draw.rect(screen, red, (posx, posy, rect, rect))
-                #pygame.draw.circle(screen, black, (posx + rect / 2, posy + rect/ 2), rect / 2.5)
-                blackpiece = pygame.image.load("assets/blackpiece.png")
-                screen.blit(blackpiece, (posx, posy))
+            match board[i][j]:
+                case 0:
+                    pygame.draw.rect(screen, white, (posx, posy, rect, rect))
+                    posx += rect
 
-                posx += rect
-            elif board[i][j] == 2:
-                pygame.draw.rect(screen, red, (posx, posy, rect, rect))
-                #pygame.draw.circle(screen, white, (posx + rect / 2, posy+rect/2), rect / 2.5)
-                whitepiece = pygame.image.load("assets/whitepiece.png")
-                screen.blit(whitepiece, (posx, posy))
-                posx += rect
+                case 1:
+                    pygame.draw.rect(screen, black, (posx, posy, rect, rect))
+                    posx += rect
+
+                case 2:
+                    pygame.draw.rect(screen, black, (posx, posy, rect, rect))
+                    screen.blit(whitepiece, (posx, posy))
+                    posx += rect
+
+                case 3:
+                    pygame.draw.rect(screen, black, (posx, posy, rect, rect))
+                    screen.blit(blackpiece, (posx, posy))
+                    posx += rect
 
         posy += rect
         posx = 0
@@ -48,16 +57,30 @@ def drawBoard(board , screen):
     posy=0
     pygame.display.flip()
 
+def drawMenu(screen):
+    screen.fill(red)
+    #button1
+    pygame.draw.rect(screen, back, (posx, posy, rect, rect))
+
 def convertInput():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
                 target = pygame.mouse.get_pos()
-                return target[1] // rect, target[0] // rect
+                print(target)
+                return int(target[1] // rect), int(target[0] // rect)
 
 def highliteSquare(screen, slcrow, slccol):
-    pygame.draw.rect(screen, "green", (slccol * rect, slcrow * rect, rect,rect), width = 5)
+    pygame.draw.rect(screen, highlite, (slccol * rect, slcrow * rect, rect,rect), width = 5)
     pygame.display.flip()
+
+def drawAnim(screen, slcrow, slccol, dstrow, dstcol):
+    for i in range(0, 30):
+        screen.blit(blackpiece, (slccol * 100, slcrow * 100))
+        pygame.display.flip()
+        slccol += 0.03
+        slcrow -= 0.03
+        pygame.time.wait(1)
 
 def quit():
     pygame.quit()

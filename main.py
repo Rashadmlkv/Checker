@@ -17,6 +17,7 @@ while running:
     slcrow, slccol, isKing = io.getPiece(board, turn)
     drw.highliteSquare(screen, slcrow, slccol)
     dstrow, dstcol = io.getSquare(board, turn, slcrow, slccol, isKing)
+    drw.drawAnim(screen, slcrow, slccol, dstrow, dstcol)
     board, contAttack = brd.updateBoard(board, turn, slcrow, slccol, dstrow, dstcol)
 
     if contAttack:
