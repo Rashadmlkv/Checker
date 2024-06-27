@@ -1,40 +1,74 @@
-class Board():
-    def __init__(self):
-        self.__length = 8
+def createBoard(color="Black"):
+    if color == "Black":
+        board = [
+                [0, 2, 0, 2, 0, 2, 0, 2],
+                [2, 0, 2, 0, 2, 0, 2, 0],
+                [0, 2, 0, 2, 0, 2, 0, 2],
+                [1, 0, 1, 0, 1, 0, 1, 0],
+                [0, 1, 0, 1, 0, 1, 0, 1],
+                [3, 0, 3, 0, 3, 0, 3, 0],
+                [0, 3, 0, 3, 0, 3, 0, 3],
+                [3, 0, 3, 0, 3, 0, 3, 0]]
+        return board
+    elif color == "White":
+        board = [
+                [0, 3, 0, 3, 0, 3, 0, 3],
+                [3, 0, 3, 0, 3, 0, 3, 0],
+                [0, 3, 0, 3, 0, 3, 0, 3],
+                [1, 0, 1, 0, 1, 0, 1, 0],
+                [0, 1, 0, 1, 0, 1, 0, 1],
+                [2, 0, 2, 0, 2, 0, 2, 0],
+                [0, 2, 0, 2, 0, 2, 0, 2],
+                [2, 0, 2, 0, 2, 0, 2, 0]]
+        return board
+    else:
+        print("Unknown input!")
 
-        self.__board = [[None for c in range(self._length)] \
-                                for r in range(self._length)]
+def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
+    contAttack = False
 
-    def get_length(self):
-        return self.__length
+    if (dstrow == 0):
+        board[dstrow][dstcol] = turn + 2
+    else:
+        board[dstrow][dstcol] = board[slcrow][slccol]
 
-    def get_board(self):
-        return self.__board
+    board[slcrow][slccol] = 1
 
-    def is_free(self, row, col):
-        return self.__board[row][col]
+    if (slcrow - dstrow == 2) or (dstrow - slcrow == 2):
+        board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] = 1
+        contAttack = isContinue(board, dstrow, dstcol)
 
-    def place(self, row, col, piece):
-        self.__board[row][col] = piece
+    return board, contAttack
 
-    def get(self, row, col):
-        return self.__board[row][col]
 
-    def remove(self, row, col):
-        self.__board[row][col] = None
+def isFinish(board, running):
+    whites, blacks = 0, 0
+    for i in range(8):
+        for j in range(8):
+            if board[i][j] == 2 or board[i][j] == 4:
+                whites += 1
+            elif board[i][j] == 3 or board[i][j] == 5:
+                blacks += 1
 
-    def is_empty(self):
-        for r in range(self.__length):
-            for c in range(self.__length):
-                if not self.is_free(r,c):
-                    return False
+    if (whites == 0):
+        print("BLACK WON!")
+        running = False
+        return running
+    elif (blacks == 0):
+        print("WHITE WON!")
+        running = False
+        return running
+    else:
         return True
 
-    def is_full(self):
-        for r in range(self.__length):
-            for c in range(self.__length):
-                if self.is_free(r, c):
-                    return False
+def isContinue(board, c, d):
+    if (c < 6 and d > 1 and (board[c+1][d-1] == 3 or board[c+1][d-1] == 5) and board[c+2][d-2] == 1   #left bottom
+            or c < 6 and d < 6 and (board[c+1][d+1] == 3 or board[c+1][d+1] == 5) and board[c+2][d+2] == 1   #right bottom
+            or c > 1 and d > 1 and (board[c-1][d-1] == 3 or board[c-1][d-1] == 5) and board[c-2][d-2] == 1   #left upper
+            or c > 1 and d < 6 and (board[c-1][d+1] == 3 or board[c-1][d+1] == 5) and board[c-2][d+2] == 1): #right upper
         return True
 
 
+def printBoard(board):
+    for i in board:
+        print(i)
