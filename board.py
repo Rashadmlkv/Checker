@@ -52,19 +52,19 @@ def isFinish(board, running):
     if (whites == 0):
         print("BLACK WON!")
         running = False
-        return running
+        return running, "Black"
     elif (blacks == 0):
         print("WHITE WON!")
         running = False
-        return running
+        return running, "White"
     else:
-        return True
+        return True, None
 
 '''
     Check for double jump
 '''
 def isContinue(board, turn, row, col):
-    if turn == 3:
+    if turn == 3 or turn == 5:
         opp = 2
         next = [(-1, -1), (-1, +1)]
     else:
