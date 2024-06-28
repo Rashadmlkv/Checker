@@ -6,10 +6,10 @@ screen20percent = screenObj.current_h / 100 * 20
 screenHeight = screenObj.current_h - screen20percent
 screenWidth = screenObj.current_h
 #rgb
-white = (242, 227, 219)
-black = (65, 100, 74)
-back = (38, 58, 41)
-highlite = (232, 106, 51)
+white = (241, 219, 191) 
+black = (105, 130, 105)
+back = (182, 199, 170)
+highlite = (255, 176, 0)
 
 #positions
 posx, posy = 0, 0
@@ -21,25 +21,28 @@ whitepiece = pygame.image.load("assets/whitepiece.png")
 blackpiece = pygame.image.load("assets/blackpiece.png")
 whiteKingpiece = pygame.image.load("assets/whiteKingpiece.png")
 blackKingpiece = pygame.image.load("assets/blackKingpiece.png")
+limelogo = pygame.image.load("assets/limelogo.png")
 
 button_width = 200
 button_height = 50
 centerx = screenWidth // 2
 centery = screenHeight // 2
-button_start = pygame.Rect(centerx - button_width, centery - button_height - 10, button_width, button_height)
+button_pvp = pygame.Rect(centerx - button_width, centery - (button_height * 2) - 20, button_width, button_height)
+button_pve = pygame.Rect(centerx - button_width, centery - button_height - 10, button_width, button_height)
 button_exit = pygame.Rect(centerx - button_width, centery + 10, button_width, button_height)
-button_color = (232, 106, 51) 
-button_hover_color = (178, 83, 62)
+button_color = (246, 230, 203)
+button_hover_color = (22, 48, 32)
 font = pygame.font.Font(None, 36)
 
 def createWindow():
     global screen
     screen = pygame.display.set_mode((screenHeight,screenHeight))
-
+    pygame.display.set_icon(limelogo)
+    pygame.display.set_caption('Lime Checkers')
     return screen
 
 def draw_text(text, rect, screen):
-    text_surface = font.render(text, True, white)
+    text_surface = font.render(text, True, (22, 48, 32))
     text_rect = text_surface.get_rect(center=rect.center)
     screen.blit(text_surface, text_rect)
 
@@ -87,7 +90,6 @@ def drawBoard(board , screen):
     posy=0
     pygame.display.flip()
 
-
 def drawMenu(screen):
     while True:
         for event in pygame.event.get():
@@ -96,22 +98,27 @@ def drawMenu(screen):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-                if button_start.collidepoint(pos):
+                if button_pvp.collidepoint(pos):
                     return
-                    print("Start button clicked")
+                if button_pve.collidepoint(pos):
+                    return  
                 if button_exit.collidepoint(pos):
-                    print("Exit button clicked")
                     pygame.quit()
                     sys.exit()
 
-        screen.fill(white)
-        
+        screen.fill(back)
+        screen.blit(pygame.transform.rotate(limelogo, 5), (screenWidth // 3, screenHeight // 1.7))
+        screen.blit(limelogo, (screenWidth // 24, screenHeight // 6))
+        screen.blit(limelogo, (screenWidth // 2, screenHeight // 9))
+
         # Draw buttons
-        pygame.draw.rect(screen, button_color, button_start)
+        pygame.draw.rect(screen, button_color, button_pvp)
+        pygame.draw.rect(screen, button_color, button_pve)
         pygame.draw.rect(screen, button_color, button_exit)
 
         # Draw button text
-        draw_text("Start", button_start, screen)
+        draw_text("PvP", button_pvp, screen)
+        draw_text("PvE", button_pve, screen)
         draw_text("Exit", button_exit, screen)
 
         pygame.display.flip()

@@ -12,12 +12,10 @@ screen = drw.createWindow()
 
 while running:
     drw.drawMenu(screen)
-    drw.checkEvent()
     game = True
     board = brd.createBoard()
 
     while game:
-        drw.checkEvent()
         drw.drawBoard(board, screen)
         slcrow, slccol, isKing = io.getPiece(board, turn)
         drw.highliteSquare(screen, slcrow, slccol)
