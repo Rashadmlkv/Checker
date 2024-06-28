@@ -66,9 +66,14 @@ def convertInput():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP:
+                pygame.event.pump()
+
+        #if pygame.mouse.get_pressed() == (1,0,0):
                 target = pygame.mouse.get_pos()
                 print(target)
-                return int(target[1] // rect), int(target[0] // rect)
+                return int(target[1] // rect), int(target[0] // rect), 0
+        if pygame.mouse.get_pressed() == (0,0,1):
+            return 0, 0, 1
 
 def highliteSquare(screen, slcrow, slccol):
     pygame.draw.rect(screen, highlite, (slccol * rect, slcrow * rect, rect,rect), width = 5)
@@ -81,6 +86,10 @@ def drawAnim(screen, slcrow, slccol, dstrow, dstcol):
         slccol += 0.03
         slcrow -= 0.03
         pygame.time.wait(1)
+
+def playSound():
+    pygame.mixer.music.load("assets/soundeffect.mp3")
+    pygame.mixer.music.play()
 
 def quit():
     pygame.quit()

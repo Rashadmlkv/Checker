@@ -16,10 +16,13 @@ while running:
 
     slcrow, slccol, isKing = io.getPiece(board, turn)
     drw.highliteSquare(screen, slcrow, slccol)
-    dstrow, dstcol = io.getSquare(board, turn, slcrow, slccol, isKing)
+    dstrow, dstcol, deslc = io.getSquare(board, turn, slcrow, slccol, isKing)
+    if deslc:
+        continue
     drw.drawAnim(screen, slcrow, slccol, dstrow, dstcol)
     board, contAttack = brd.updateBoard(board, turn, slcrow, slccol, dstrow, dstcol)
-
+    drw.playSound()
+    
     if contAttack:
         continue
     running = brd.isFinish(board, running)

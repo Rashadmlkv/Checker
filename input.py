@@ -8,7 +8,7 @@ pygame.init()
 '''
 def getPiece(board, turn):
     while True:
-        slcrow, slccol = drw.convertInput()
+        slcrow, slccol, deslc = drw.convertInput()
         try:
             #slcrow, slccol = [int(a) for a in input("Select piece: ").split()]
             if (slcrow < 0 or slcrow > 7) or (slccol < 0 or slccol > 7):
@@ -35,7 +35,9 @@ def getPiece(board, turn):
 '''
 def getSquare(board, turn, slcrow, slccol, isKing):
     while True:
-        dstrow, dstcol = drw.convertInput()
+        dstrow, dstcol, deslc = drw.convertInput()
+        if deslc:
+            return 0, 0, 1
         try:
             #dstrow, dstcol = [int(a) for a in input("Select square: ").split()]
             if (dstrow < 0 or dstrow > 7) or (dstrow < 0 or dstcol > 7):
@@ -71,7 +73,7 @@ def getSquare(board, turn, slcrow, slccol, isKing):
                     print("Select forward move!")
                     continue
 
-            return dstrow, dstcol
+            return dstrow, dstcol, 0
 
         except (ValueError, TypeError):
             print("Select only two integers!")
