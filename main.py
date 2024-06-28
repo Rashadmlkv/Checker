@@ -10,6 +10,9 @@ turn = 3
 board = brd.createBoard()
 screen = drw.createWindow()
 
+
+
+drw.drawMenu(screen)
 while running:
     #brd.printBoard(board)
     drw.drawBoard(board, screen)
@@ -19,7 +22,7 @@ while running:
     dstrow, dstcol, deslc = io.getSquare(board, turn, slcrow, slccol, isKing)
     if deslc:
         continue
-    drw.drawAnim(screen, slcrow, slccol, dstrow, dstcol)
+    #drw.drawAnim(screen, slcrow, slccol, dstrow, dstcol)
     board, contAttack = brd.updateBoard(board, turn, slcrow, slccol, dstrow, dstcol)
     drw.playSound()
     

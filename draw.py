@@ -1,10 +1,10 @@
-import pygame
+import pygame, sys
 pygame.init()
 
 screenObj = pygame.display.Info()
 screen20percent = screenObj.current_h / 100 * 20
-screenWidth = screenObj.current_w
 screenHeight = screenObj.current_h - screen20percent
+screenWidth = screenObj.current_h
 #rgb
 white = (242, 227, 219)
 black = (65, 100, 74)
@@ -19,11 +19,31 @@ rect = screenHeight // 8
 
 whitepiece = pygame.image.load("assets/whitepiece.png")
 blackpiece = pygame.image.load("assets/blackpiece.png")
+whiteKingpiece = pygame.image.load("assets/whiteKingpiece.png")
+blackKingpiece = pygame.image.load("assets/blackKingpiece.png")
+
+button_width = 200
+button_height = 50
+centerx = screenWidth // 2
+centery = screenHeight // 2
+button_start = pygame.Rect(centerx - button_width, centery - button_height - 10, button_width, button_height)
+button_exit = pygame.Rect(centerx - button_width, centery + 10, button_width, button_height)
+button_color = (232, 106, 51) 
+button_hover_color = (178, 83, 62)
+font = pygame.font.Font(None, 36)
 
 def createWindow():
-    screen = pygame.display.set_mode((screenHeight + screen20percent,screenHeight))
+    global screen
+    screen = pygame.display.set_mode((screenHeight,screenHeight))
 
     return screen
+
+def draw_text(text, rect, screen):
+    text_surface = font.render(text, True, white)
+    text_rect = text_surface.get_rect(center=rect.center)
+    screen.blit(text_surface, text_rect)
+
+
 
 def drawBoard(board , screen):
     screen.fill(back)
@@ -50,6 +70,16 @@ def drawBoard(board , screen):
                     screen.blit(blackpiece, (posx, posy))
                     posx += rect
 
+                case 4:
+                    pygame.draw.rect(screen, black, (posx, posy, rect, rect))
+                    screen.blit(whiteKingpiece, (posx, posy))
+                    posx += rect
+
+                case 5:
+                    pygame.draw.rect(screen, black, (posx, posy, rect, rect))
+                    screen.blit(blackKingpiece, (posx, posy))
+                    posx += rect
+
         posy += rect
         posx = 0
 
@@ -57,10 +87,34 @@ def drawBoard(board , screen):
     posy=0
     pygame.display.flip()
 
+
 def drawMenu(screen):
-    screen.fill(red)
-    #button1
-    pygame.draw.rect(screen, back, (posx, posy, rect, rect))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                if button_start.collidepoint(pos):
+                    return
+                    print("Start button clicked")
+                if button_exit.collidepoint(pos):
+                    print("Exit button clicked")
+                    pygame.quit()
+                    sys.exit()
+
+        screen.fill(white)
+        
+        # Draw buttons
+        pygame.draw.rect(screen, button_color, button_start)
+        pygame.draw.rect(screen, button_color, button_exit)
+
+        # Draw button text
+        draw_text("Start", button_start, screen)
+        draw_text("Exit", button_exit, screen)
+
+        pygame.display.flip()
 
 def convertInput():
     while True:

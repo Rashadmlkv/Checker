@@ -15,19 +15,6 @@ def createBoard(color="Black"):
                 [0, 3, 0, 3, 0, 3, 0, 3],
                 [3, 0, 3, 0, 3, 0, 3, 0]]
         return board
-    elif color == "White":
-        board = [
-                [0, 3, 0, 3, 0, 3, 0, 3],
-                [3, 0, 3, 0, 3, 0, 3, 0],
-                [0, 3, 0, 3, 0, 3, 0, 3],
-                [1, 0, 1, 0, 1, 0, 1, 0],
-                [0, 1, 0, 1, 0, 1, 0, 1],
-                [2, 0, 2, 0, 2, 0, 2, 0],
-                [0, 2, 0, 2, 0, 2, 0, 2],
-                [2, 0, 2, 0, 2, 0, 2, 0]]
-        return board
-    else:
-        print("Unknown input!")
 
 '''
     Reassign Board
@@ -37,7 +24,7 @@ def createBoard(color="Black"):
 def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
     contAttack = False
 
-    if (dstrow == 0):
+    if (dstrow == 0) or (dstrow == 7):
         board[dstrow][dstcol] = turn + 2
     else:
         board[dstrow][dstcol] = board[slcrow][slccol]
@@ -76,10 +63,13 @@ def isFinish(board, running):
 '''
     Check for double jump
 '''
-def isContinue(board, turn, row, col):    
+def isContinue(board, turn, row, col):
     next = [(+1, -1), (+1, +1), (-1, -1), (-1, +1)]
     opp = 2 if turn == 3 else 3
     
+    # if not ((1 < row < 6) and (1 < col < 6)):
+        # return False
+
     for (r, c) in next:
         if (1 <= (row + r) < 7) and (1 <= (col + c) < 7) and \
             board[row + r][col + c] == opp and \
@@ -87,7 +77,6 @@ def isContinue(board, turn, row, col):
             return True
         
     return False
-
 
 def printBoard(board):
     for i in board:
