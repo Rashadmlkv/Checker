@@ -46,7 +46,7 @@ def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
 
     if (slcrow - dstrow == 2) or (dstrow - slcrow == 2):
         board[(dstrow + slcrow) // 2][(dstcol + slccol) // 2] = 1
-        contAttack = isContinue(board, dstrow, dstcol)
+        contAttack = isContinue(board, turn, dstrow, dstcol)
 
     return board, contAttack
 
@@ -76,12 +76,17 @@ def isFinish(board, running):
 '''
     Check for double jump
 '''
-def isContinue(board, c, d):
-    if (c < 6 and d > 1 and (board[c+1][d-1] == 3 or board[c+1][d-1] == 5) and board[c+2][d-2] == 1   #left bottom
-            or c < 6 and d < 6 and (board[c+1][d+1] == 3 or board[c+1][d+1] == 5) and board[c+2][d+2] == 1   #right bottom
-            or c > 1 and d > 1 and (board[c-1][d-1] == 3 or board[c-1][d-1] == 5) and board[c-2][d-2] == 1   #left upper
-            or c > 1 and d < 6 and (board[c-1][d+1] == 3 or board[c-1][d+1] == 5) and board[c-2][d+2] == 1): #right upper
-        return True
+def isContinue(board, turn, row, col):    
+    next = [(+1, -1), (+1, +1), (-1, -1), (-1, +1)]
+    opp = 2 if turn == 3 else 3
+    
+    for (r, c) in next:
+        if (1 <= (row + r) < 7) and (1 <= (col + c) < 7) and \
+            board[row + r][col + c] == opp and \
+            board[row + 2 * r][col + 2 * c] == 1:
+            return True
+        
+    return False
 
 
 def printBoard(board):
