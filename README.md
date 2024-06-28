@@ -23,6 +23,6 @@ Ziyad Ibrahim - [Github](https://github.com/z1yad020) / [Twitter](https://twitte
 ## License
 Public Domain. No copy write protection. 
 
-##Images
-![Gameplay](https://imgur.com/GJ5k7bZ)
-![Menu](https://imgur.com/geyVBJQ)
+## Images
+![image1](https://github.com/Rashadmlkv/Checker/assets/58619029/cf2ecf1e-d17d-4672-b6f4-8664fd4f2ce1)
+![image2](https://github.com/Rashadmlkv/Checker/assets/58619029/9c12b667-8d09-4b3f-ae6c-5f2200b21671)
