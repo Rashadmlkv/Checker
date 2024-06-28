@@ -64,11 +64,12 @@ def isFinish(board, running):
     Check for double jump
 '''
 def isContinue(board, turn, row, col):
-    next = [(+1, -1), (+1, +1), (-1, -1), (-1, +1)]
-    opp = 2 if turn == 3 else 3
-    
-    # if not ((1 < row < 6) and (1 < col < 6)):
-        # return False
+    if turn == 3:
+        opp = 2
+        next = [(-1, -1), (-1, +1)]
+    else:
+        opp = 3
+        next = [(+1, -1), (+1, +1)]
 
     for (r, c) in next:
         if (1 <= (row + r) < 7) and (1 <= (col + c) < 7) and \
