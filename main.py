@@ -6,7 +6,7 @@ import draw as drw
 import aitool as ai
 import pygame
 import copy
-
+pygame.init()
 
 running = True
 turn = 3
@@ -297,6 +297,7 @@ while running:
 
             print("\t{} played {}.".format(turn, str(move)))
             turn = 3
+            pygame.time.wait(100)
             continue
 
         slcrow, slccol, isKing = io.getPiece(board, turn)

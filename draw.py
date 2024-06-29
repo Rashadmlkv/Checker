@@ -139,7 +139,7 @@ def highliteSquare(screen, slcrow, slccol):
 
 def drawFinish(screen, winner):
     if winner is not None:
-        rect2 = pygame.draw.rect(screen, button_color, button_start)
+        rect2 = pygame.draw.rect(screen, button_color, button_pvp)
         draw_text(f"{winner} WON",rect2 ,screen)
         pygame.display.flip()
         pygame.time.wait(5000)
