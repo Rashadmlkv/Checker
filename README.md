@@ -8,7 +8,7 @@ Developed as a final project for Holberton School.
 Function oriented. Central architecture
 
 ## Environment
-This project is interpreted/tested on Linux Mint 21.3 LTS using python3 (version 3.4.3)
+This project is interpreted/tested on Linux Mint 21.3 LTS & Windows 10 using python3 (version 3.4.3)
 
 ## Installation
 * Clone this repository: `git clone "https://github.com/Rashadmlkv/Checker"`
