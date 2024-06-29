@@ -15,7 +15,7 @@ def heuristics(state):
     """
     board = state[0]
     turn = state[1]
-    length = board.get_length()
+    length = 8
     bp, wp = 0, 0
     bk, wk = 0, 0
     bc, wc = 0, 0
@@ -23,14 +23,14 @@ def heuristics(state):
     bsd, wsd = 0.0, 0.0
     for row in range(length):
         for col in range(length):
-            piece = board.get(row, col)
+            piece = board[row][col]
             if piece:
                 r = row if row > (length - (row + 1)) else (length - (row + 1))
                 c = col if col > (length - (col + 1)) else (length - (col + 1))
                 d = int(((r ** 2.0 + c ** 2.0) ** 0.5) / 2.0)
-                if piece.color() == 'black':
+                if piece == 3 or piece ==5:
                     bc += sum([len(v) for v in mn.get_captures(board, row, col)])
-                    if piece.is_king():
+                    if piece == 4 or piece == 5:
                         bk += 1
                     else:
                         bp += 1
@@ -38,13 +38,13 @@ def heuristics(state):
                         bsd += d
                 else:
                     wc += sum([len(v) for v in mn.get_captures(board, row, col)])
-                    if piece.is_king():
+                    if piece == 4 or piece == 5:
                         wk += 1
                     else:
                         wp += 1
                         wkd += length - (row + 1)
                         wsd += d
-    if turn == 'black':
+    if turn == 3 or turn == 5:
         black_count_heuristics = \
                 3.125 * (((bp + bk * 2.0) - (wp + wk * 2.0)) \
                     / 1.0 + ((bp + bk * 2.0) + (wp + wk * 2.0)))
@@ -98,7 +98,7 @@ def transition(state, action, ttype):
         mn.apply_move(board, action)
     elif ttype == "jump":
         mn.apply_capture(board, action)
-    turn = 'white' if state[1] == 'black' else 'black'
+    turn = 4 if state[1] == 3 or state[1] == 5 else 3
     depth += 1
     return (board, turn, depth)
 

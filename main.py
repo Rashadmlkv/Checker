@@ -65,9 +65,9 @@ def get_jumps(board, row, col, is_sorted = False):
                  and (board[row + x][col + y] != piece)]
         
         return (sorted(bottom + top) if (piece == 4 or piece == 5) else \
-                (sorted(bottom) if (piece == 3 or piece == 5) else sorted(top))) \
+                (sorted(top) if (piece == 3 or piece == 5) else sorted(bottom))) \
                     if is_sorted else (bottom + top if (piece == 4 or piece == 5) else \
-                                       (bottom if (piece == 3 or piece == 5) else top))
+                                       (top if (piece == 3 or piece == 5) else bottom))
     return []
 
 
@@ -84,9 +84,9 @@ def search_path(board, row, col, path, paths, is_sorted = False):
         for position in jumps:
             (row_to, col_to) = indexify(position)
             
-            piece = copy.copy(board[row, col])
-            board[row, col] = 1
-            board[row_to, col_to] = piece
+            piece = copy.copy(board[row][col])
+            board[row][col] = 1
+            board[row_to][col_to] = piece
 
             if (piece == 3 and row_to == 7) \
                 or (piece == 2 and row_to == 0) \
@@ -95,14 +95,14 @@ def search_path(board, row, col, path, paths, is_sorted = False):
             
             row_mid = row + 1 if row_to > row else row - 1
             col_mid = col + 1 if col_to > col else col - 1
-            capture = board[row_mid, col_mid]
-            board[row_mid, col_mid] = 1
+            capture = board[row_mid][col_mid]
+            board[row_mid][col_mid] = 1
             
             search_path(board, row_to, col_to, copy.copy(path), paths)
             
-            board[row_mid, col_mid] = capture
-            board[row_to, col_to] = 1
-            board[row, col] = piece
+            board[row_mid][col_mid] = capture
+            board[row_to][col_to] = 1
+            board[row][col] = piece
 
 
 def get_captures(board, row, col, is_sorted = False):
@@ -197,7 +197,7 @@ No return
         path_list = get_jumps(board, row, col, is_sorted = False)
         
         if path[1] in path_list:
-            piece = board[row, col]
+            piece = board[row][col]
             if piece == 3 and row_end == 7 \
             or piece == 2 and row_end == 0:
                 piece = 5 if piece == 3 else 4
@@ -238,14 +238,16 @@ def get_moves(board, row, col, is_sorted = False):
                       if (0 <= (row + x) < length) \
                           and (0 <= (col + y) < length) \
                           and board[row + x][col + y] == 1]
+        
         top = [deindexify(row + x, col + y) for (x, y) in up \
                    if (0 <= (row + x) < length) \
                        and (0 <= (col + y) < length) \
                        and board[row + x][col + y] == 1]
+        
         return (sorted(bottom + top) if (piece == 4 or piece == 5) else \
-                (sorted(bottom) if (piece == 3 or piece == 5) else sorted(top))) \
+                (sorted(top) if (piece == 3 or piece == 5) else sorted(bottom))) \
                     if is_sorted else (bottom + top if (piece == 4 or piece == 5) else \
-                                       (bottom if (piece == 3 or piece == 5) else top))
+                                       (top if (piece == 3 or piece == 5) else bottom))
     return []
 
 
@@ -269,7 +271,7 @@ No return
     path_list = get_moves(board, row, col, is_sorted = False)
     
     if move[1] in path_list:
-        piece = board.get(row, col)
+        piece = board[row][col]
         if (piece == 3 or piece == 5) and row_end == 7 \
         or (piece == 2 or piece == 4) and row_end == 0:
             piece = 5 if piece == 3 else 4
