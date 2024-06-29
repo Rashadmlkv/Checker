@@ -5,6 +5,7 @@ import input as io
 import draw as drw
 import aitool as ai
 import pygame
+import copy
 
 
 running = True
@@ -45,27 +46,28 @@ def get_jumps(board, row, col, is_sorted = False):
             is a list of string positions.
     """
     down, up = [(+1, -1), (+1, +1)], [(-1, -1), (-1, +1)]
-    length = board.get_length()
-    piece = board.get(row, col)
+    length = 8
+    piece = board[row][col]
     if piece:
         bottom = \
             [deindexify(row + 2 * x, col + 2 * y) for (x, y) in down \
              if (0 <= (row + 2 * x) < length) \
                  and (0 <= (col + 2 * y) < length) \
-                 and board.is_free(row + 2 * x, col + 2 * y) \
-                 and (not board.is_free(row + x, col + y)) \
-                 and (board.get(row + x, col + y).color() != piece.color())]
+                 and board[row + 2 * x][col + 2 * y] == 1 \
+                 and (not board[row + x][col + y] == 1) \
+                 and (board[row + x][col + y] != piece)]
         top = \
             [deindexify(row + 2 * x, col + 2 * y) for (x, y) in up \
              if (0 <= (row + 2 * x) < length) \
                  and (0 <= (col + 2 * y) < length) \
-                 and board.is_free(row + 2 * x, col + 2 * y) \
-                 and (not board.is_free(row + x, col + y)) \
-                 and (board.get(row + x, col + y).color() != piece.color())]
-        return (sorted(bottom + top) if piece.is_king() else \
-                (sorted(bottom) if piece.is_black() else sorted(top))) \
-                    if is_sorted else (bottom + top if piece.is_king() else \
-                                       (bottom if piece.is_black() else top))
+                 and board[row + 2 * x][col + 2 * y] == 1 \
+                 and (not board[row + x][col + y] == 1) \
+                 and (board[row + x][col + y] != piece)]
+        
+        return (sorted(bottom + top) if (piece == 4 or piece == 5) else \
+                (sorted(bottom) if (piece == 3 or piece == 5) else sorted(top))) \
+                    if is_sorted else (bottom + top if (piece == 4 or piece == 5) else \
+                                       (bottom if (piece == 3 or piece == 5) else top))
     return []
 
 
@@ -127,9 +129,9 @@ return list of all move
     final_list = []
     for r in range(row):
         for c in range(col):
-            piece = board[r, c]
+            piece = board[r][c]
             if piece:
-                if piece.color() == color:
+                if piece == color:
                     path_list = get_moves(board, r, c, is_sorted)
                     path_start = deindexify(r, c)
                     for path in path_list:
@@ -151,7 +153,7 @@ def get_all_captures(board, color, is_sorted = False):
     final_list = []
     for r in range(row):
         for c in range(col):
-            piece = board[r, c]
+            piece = board[r][c]
             if piece:
                 if piece == color:
                     path_list = get_captures(board, r, c, is_sorted)
@@ -196,13 +198,14 @@ No return
         
         if path[1] in path_list:
             piece = board[row, col]
-            if piece.is_black() and row_end == board.get_length()-1 \
-            or piece.is_white() and row_end == 0:
-                piece.turn_king()
-            board.remove(row, col)
+            if piece == 3 and row_end == 7 \
+            or piece == 2 and row_end == 0:
+                piece = 5 if piece == 3 else 4
+            
+            board[row][col] = 1
             row_eat, col_eat = max(row, row_end)-1, max(col, col_end)-1
-            board.remove(row_eat, col_eat)
-            board.place(row_end, col_end, piece)
+            board[row_eat][col_eat] = 1
+            board[row_end][col_end] = piece
         else:
             raise RuntimeError("Invalid jump/capture, please type" \
                              + " \'hints\' to get suggestions.")
@@ -228,21 +231,21 @@ def get_moves(board, row, col, is_sorted = False):
             is a list of string positions.
     """
     down, up = [(+1, -1), (+1, +1)], [(-1, -1), (-1, +1)]
-    length = board.get_length()
-    piece = board.get(row, col)
+    length = 8
+    piece = board[row][col]
     if piece:
         bottom = [deindexify(row + x, col + y) for (x, y) in down \
                       if (0 <= (row + x) < length) \
                           and (0 <= (col + y) < length) \
-                          and board.is_free(row + x, col + y)]
+                          and board[row + x][col + y] == 1]
         top = [deindexify(row + x, col + y) for (x, y) in up \
                    if (0 <= (row + x) < length) \
                        and (0 <= (col + y) < length) \
-                       and board.is_free(row + x, col + y)]
-        return (sorted(bottom + top) if piece.is_king() else \
-                (sorted(bottom) if piece.is_black() else sorted(top))) \
-                    if is_sorted else (bottom + top if piece.is_king() else \
-                                       (bottom if piece.is_black() else top))
+                       and board[row + x][col + y] == 1]
+        return (sorted(bottom + top) if (piece == 4 or piece == 5) else \
+                (sorted(bottom) if (piece == 3 or piece == 5) else sorted(top))) \
+                    if is_sorted else (bottom + top if (piece == 4 or piece == 5) else \
+                                       (bottom if (piece == 3 or piece == 5) else top))
     return []
 
 
@@ -267,11 +270,11 @@ No return
     
     if move[1] in path_list:
         piece = board.get(row, col)
-        if piece.is_black() and row_end == board.get_length()-1 \
-        or piece.is_white() and row_end == 0:
-            piece.turn_king()
-        board.remove(row, col)
-        board.place(row_end, col_end, piece)
+        if (piece == 3 or piece == 5) and row_end == 7 \
+        or (piece == 2 or piece == 4) and row_end == 0:
+            piece = 5 if piece == 3 else 4
+        board[row][col] = 1
+        board[row_end][col_end] = piece
     else:
         raise RuntimeError("Invalid move, please type" \
                          + " \'hints\' to get suggestions.")
@@ -287,8 +290,6 @@ while running:
     while game:
         drw.drawBoard(board, screen)
 
-
-
         if turn == 2:
             move = ai.get_next_move(board, turn)
             if type(move) == list:
@@ -296,7 +297,7 @@ while running:
             if type(move) == tuple:
                 apply_move(board, move)
             
-            print("\t{:s} played {:s}.".format(turn, str(move)))
+            print("\t{} played {}.".format(turn, str(move)))
             turn = 3
             continue
 
