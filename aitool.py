@@ -162,13 +162,13 @@ def minvalue(state, maxdepth, alpha = None, beta = None):
             return v
 
 def minimax_search(state, maxdepth = None):
-    import main as mn
+    from main import get_hints
     """
     The depth limited minimax tree search.
     """
     board = state[0]
     turn = state[1]
-    (moves, captures) = mn.get_hints(board, turn)
+    (moves, captures) = get_hints(board, turn)
     if captures:
         return max([(a, minvalue(transition(state, a, "jump"), maxdepth)) \
                         for a in captures], key = lambda v: v[1])

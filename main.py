@@ -198,8 +198,8 @@ No return
         
         if path[1] in path_list:
             piece = board[row][col]
-            if piece == 3 and row_end == 7 \
-            or piece == 2 and row_end == 0:
+            if piece == 2 and row_end == 7 \
+            or piece == 3 and row_end == 0:
                 piece = 5 if piece == 3 else 4
             
             board[row][col] = 1
@@ -250,7 +250,6 @@ def get_moves(board, row, col, is_sorted = False):
                                        (top if (piece == 3 or piece == 5) else bottom))
     return []
 
-
 def apply_move(board, move):
     """
 Performs actual operations and moves that move the specified pieces.
@@ -272,8 +271,8 @@ No return
     
     if move[1] in path_list:
         piece = board[row][col]
-        if (piece == 3 or piece == 5) and row_end == 7 \
-        or (piece == 2 or piece == 4) and row_end == 0:
+        if (piece == 2 or piece == 4) and row_end == 7 \
+        or (piece == 3 or piece == 5) and row_end == 0:
             piece = 5 if piece == 3 else 4
         board[row][col] = 1
         board[row_end][col_end] = piece
@@ -281,30 +280,24 @@ No return
         raise RuntimeError("Invalid move, please type" \
                          + " \'hints\' to get suggestions.")
 
-
-
-
 while running:
-    drw.drawMenu(screen)
-    game = True
     board = brd.createBoard()
+    move = ai.get_next_move(board, turn) # This shit causes bug, if not written here! There is import problem in ai.
+    game , bot = drw.drawMenu(screen)
 
     while game:
         drw.drawBoard(board, screen)
-
-        if turn == 2:
+        brd.printBoard(board)
+        if turn == 2 and bot == 1:
             move = ai.get_next_move(board, turn)
             if type(move) == list:
                 apply_capture(board, move)
             if type(move) == tuple:
                 apply_move(board, move)
-            
+
             print("\t{} played {}.".format(turn, str(move)))
             turn = 3
             continue
-
-
-
 
         slcrow, slccol, isKing = io.getPiece(board, turn)
         drw.highliteSquare(screen, slcrow, slccol)
@@ -312,14 +305,15 @@ while running:
 
         if deslc:
             continue
-    
+
         board, contAttack = brd.updateBoard(board, turn, slcrow, slccol, dstrow, dstcol)
         drw.playSound()
-    
+
         if contAttack:
             continue
-    
+ 
         game, winner = brd.isFinish(board, running)
+        print(game)
         drw.drawFinish(screen, winner)
 
     

@@ -24,7 +24,9 @@ def createBoard(color="Black"):
 def updateBoard(board, turn, slcrow, slccol, dstrow, dstcol):
     contAttack = False
 
-    if (dstrow == 0) or (dstrow == 7):
+    if (dstrow == 0) and turn == 3:
+        board[dstrow][dstcol] = turn + 2
+    elif (dstrow == 7) and turn == 2:
         board[dstrow][dstcol] = turn + 2
     else:
         board[dstrow][dstcol] = board[slcrow][slccol]

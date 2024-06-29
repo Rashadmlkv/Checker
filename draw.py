@@ -99,9 +99,9 @@ def drawMenu(screen):
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 if button_pvp.collidepoint(pos):
-                    return
+                    return 1, 0
                 if button_pve.collidepoint(pos):
-                    return  
+                    return 1, 1
                 if button_exit.collidepoint(pos):
                     pygame.quit()
                     sys.exit()
