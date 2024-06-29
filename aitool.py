@@ -1,7 +1,7 @@
-import main as mn
 import copy
 
 def heuristics(state):
+    import main as mn
     """
     This is the heuristics function. This function calculates these metrics:
         a. Normalized utility values from the number of pawn and king pieces 
@@ -72,6 +72,7 @@ def heuristics(state):
                     + white_kingdist_heuristics + white_safe_heuristics
                     
 def is_terminal(state, maxdepth = None):
+    import main as mn
     """
     Determines if a tree node is a terminal or not.
     Returns boolean True/False.
@@ -85,6 +86,7 @@ def is_terminal(state, maxdepth = None):
     return ((not moves) and (not captures))
 
 def transition(state, action, ttype):
+    import main as mn
     """
     This is the transition function. Given a board state and action,
     it transitions to the next board state.
@@ -101,6 +103,7 @@ def transition(state, action, ttype):
     return (board, turn, depth)
 
 def maxvalue(state, maxdepth, alpha = None, beta = None):
+    import main as mn
     """
     The maxvalue function for the adversarial tree search.
     """
@@ -131,6 +134,7 @@ def maxvalue(state, maxdepth, alpha = None, beta = None):
             return v            
 
 def minvalue(state, maxdepth, alpha = None, beta = None):
+    import main as mn
     board = state[0]
     turn = state[1]
     if is_terminal(state, maxdepth):
@@ -158,6 +162,7 @@ def minvalue(state, maxdepth, alpha = None, beta = None):
             return v
 
 def minimax_search(state, maxdepth = None):
+    import main as mn
     """
     The depth limited minimax tree search.
     """
