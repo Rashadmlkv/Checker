@@ -126,12 +126,15 @@ def drawMenu(screen):
 def convertInput():
     while True:
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return 0, 0, 0, 1
             if event.type == pygame.MOUSEBUTTONUP:
                 pygame.event.pump()
                 target = pygame.mouse.get_pos()
-                return int(target[1] // rect), int(target[0] // rect), 0
+                return int(target[1] // rect), int(target[0] // rect), 0, 0
         if pygame.mouse.get_pressed() == (0,0,1):
-            return 0, 0, 1
+            return 0, 0, 1, 0
+
 
 def highliteSquare(screen, slcrow, slccol):
     pygame.draw.rect(screen, highlite, (slccol * rect, slcrow * rect, rect,rect), width = 5)

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 import board as brd
 import input as io
 import draw as drw
@@ -300,9 +301,14 @@ while running:
             pygame.time.wait(100)
             continue
 
-        slcrow, slccol, isKing = io.getPiece(board, turn)
+        slcrow, slccol, isKing, esc = io.getPiece(board, turn)
+
+        if esc:
+            break
         drw.highliteSquare(screen, slcrow, slccol)
-        dstrow, dstcol, deslc = io.getSquare(board, turn, slcrow, slccol, isKing)
+        dstrow, dstcol, deslc, esc = io.getSquare(board, turn, slcrow, slccol, isKing)
+        if esc:
+            break
 
         if deslc:
             continue
