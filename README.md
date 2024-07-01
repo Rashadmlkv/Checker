@@ -28,4 +28,4 @@ Public Domain. No copy write protection.
 ![image2](https://github.com/Rashadmlkv/Checker/assets/58619029/9c12b667-8d09-4b3f-ae6c-5f2200b21671)
 
 ## Presentation
-[You can wath our presentation here :) 02:27:56]
+[You can wath our presentation here :) 02:27:56](https://www.youtube.com/live/tRd-qLKi25w)
