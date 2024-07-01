@@ -180,5 +180,5 @@ def minimax_search(state, maxdepth = None):
 
 def get_next_move(board, turn):
     state = (board, turn, 0)
-    move = minimax_search(state, 7)
+    move = minimax_search(state, 1)
     return move[0]

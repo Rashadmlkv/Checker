@@ -72,28 +72,31 @@ def isContinue(board, turn, row, col):
     #else:
     #    opp = 3
     #    next = [(+1, -1), (+1, +1)]
-
     match board[row][col]:
         case 2: 
             opp = 3
+            oppk = 5
             next = [(+1, -1), (+1, +1)]
 
         case 3:
             opp = 2
+            oppk = 4
             next = [(-1, -1), (-1, +1)]
 
         case 4:
             opp = 3
+            oppk = 5
             next = [(+1, -1), (+1, +1), (-1, -1), (-1, +1)]
 
         case 5:
             opp = 2
+            oppk = 4
             next = [(+1, -1), (+1, +1), (-1, -1), (-1, +1)]
 
 
     for (r, c) in next:
         if (1 <= (row + r) < 7) and (1 <= (col + c) < 7) and \
-            board[row + r][col + c] == opp and \
+            (board[row + r][col + c] == opp or board[row + r][col + c] == oppk) and \
             board[row + 2 * r][col + 2 * c] == 1:
             return True
         
